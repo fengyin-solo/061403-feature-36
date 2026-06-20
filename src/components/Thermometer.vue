@@ -1,5 +1,5 @@
 <template>
-  <div class="thermometer-container" :class="{ danger: isDanger }">
+  <div class="thermometer-container" :class="[ { danger: isDanger }, `temp-${temperatureStage}` ]">
     <div class="thermometer">
       <div class="thermometer-scale">
         <span v-for="i in 11" :key="i" class="scale-mark" :style="{ bottom: (i - 1) * 10 + '%' }">
@@ -34,6 +34,10 @@ const props = defineProps({
   isDanger: {
     type: Boolean,
     default: false
+  },
+  temperatureStage: {
+    type: String,
+    default: 'warm'
   }
 })
 
@@ -71,7 +75,8 @@ function getBulbColor() {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 15px;
   backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .thermometer-container.danger {
@@ -81,6 +86,42 @@ function getBulbColor() {
 @keyframes pulse-danger {
   0%, 100% { box-shadow: 0 0 20px rgba(231, 76, 60, 0.5); }
   50% { box-shadow: 0 0 40px rgba(231, 76, 60, 0.8); }
+}
+
+.thermometer-container.temp-freezing {
+  background: linear-gradient(135deg, rgba(100, 200, 255, 0.3), rgba(50, 150, 200, 0.2));
+  border-color: rgba(100, 200, 255, 0.5);
+  box-shadow: 0 0 25px rgba(100, 200, 255, 0.4), inset 0 0 20px rgba(100, 200, 255, 0.1);
+  animation: frostGlow 2s ease-in-out infinite;
+}
+
+@keyframes frostGlow {
+  0%, 100% { box-shadow: 0 0 25px rgba(100, 200, 255, 0.4), inset 0 0 20px rgba(100, 200, 255, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(100, 200, 255, 0.6), inset 0 0 30px rgba(100, 200, 255, 0.2); }
+}
+
+.thermometer-container.temp-cold {
+  background: linear-gradient(135deg, rgba(80, 180, 220, 0.25), rgba(40, 120, 180, 0.15));
+  border-color: rgba(80, 180, 220, 0.4);
+  box-shadow: 0 0 20px rgba(80, 180, 220, 0.3);
+}
+
+.thermometer-container.temp-warm {
+  background: linear-gradient(135deg, rgba(255, 150, 50, 0.2), rgba(255, 100, 50, 0.1));
+  border-color: rgba(255, 150, 50, 0.4);
+  box-shadow: 0 0 20px rgba(255, 150, 50, 0.2);
+}
+
+.thermometer-container.temp-hot {
+  background: linear-gradient(135deg, rgba(255, 100, 50, 0.35), rgba(255, 50, 0, 0.2));
+  border-color: rgba(255, 100, 50, 0.6);
+  box-shadow: 0 0 30px rgba(255, 100, 50, 0.5), inset 0 0 20px rgba(255, 100, 50, 0.15);
+  animation: heatGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes heatGlow {
+  0%, 100% { box-shadow: 0 0 30px rgba(255, 100, 50, 0.5), inset 0 0 20px rgba(255, 100, 50, 0.15); }
+  50% { box-shadow: 0 0 45px rgba(255, 100, 50, 0.7), inset 0 0 30px rgba(255, 100, 50, 0.25); }
 }
 
 .thermometer {

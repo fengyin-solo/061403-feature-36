@@ -1,5 +1,5 @@
 <template>
-  <div class="action-panel">
+  <div class="action-panel" :class="`temp-${temperatureStage}`">
     <h3 class="panel-title">行动</h3>
     <div v-if="isNight" class="night-warning">
       <span>🌙 夜晚无法外出活动，请保持温暖！</span>
@@ -65,7 +65,8 @@ defineProps({
   canFire: { type: Boolean, default: false },
   canCraft: { type: Boolean, default: false },
   huntRate: { type: Number, default: 0.3 },
-  food: { type: Number, default: 0 }
+  food: { type: Number, default: 0 },
+  temperatureStage: { type: String, default: 'warm' }
 })
 
 defineEmits(['chop', 'hunt', 'craft', 'fire', 'eat'])
@@ -78,6 +79,41 @@ defineEmits(['chop', 'hunt', 'craft', 'fire', 'eat'])
   padding: 20px;
   backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.5s ease;
+}
+
+.action-panel.temp-freezing {
+  background: linear-gradient(135deg, rgba(100, 200, 255, 0.25), rgba(50, 150, 200, 0.15));
+  border-color: rgba(100, 200, 255, 0.4);
+  box-shadow: 0 0 20px rgba(100, 200, 255, 0.3);
+}
+
+.action-panel.temp-freezing .action-btn:not(.disabled):not(.fire-btn):not(.food-btn) {
+  border-color: rgba(100, 200, 255, 0.5);
+  background: linear-gradient(135deg, rgba(100, 200, 255, 0.3), rgba(50, 150, 200, 0.15));
+}
+
+.action-panel.temp-cold {
+  background: linear-gradient(135deg, rgba(80, 180, 220, 0.2), rgba(40, 120, 180, 0.1));
+  border-color: rgba(80, 180, 220, 0.3);
+  box-shadow: 0 0 15px rgba(80, 180, 220, 0.2);
+}
+
+.action-panel.temp-warm {
+  background: linear-gradient(135deg, rgba(255, 150, 50, 0.15), rgba(255, 100, 50, 0.08));
+  border-color: rgba(255, 150, 50, 0.3);
+  box-shadow: 0 0 15px rgba(255, 150, 50, 0.15);
+}
+
+.action-panel.temp-hot {
+  background: linear-gradient(135deg, rgba(255, 100, 50, 0.3), rgba(255, 50, 0, 0.15));
+  border-color: rgba(255, 100, 50, 0.5);
+  box-shadow: 0 0 25px rgba(255, 100, 50, 0.4);
+}
+
+.action-panel.temp-hot .action-btn:not(.disabled):not(.fire-btn):not(.food-btn) {
+  border-color: rgba(255, 150, 50, 0.6);
+  background: linear-gradient(135deg, rgba(255, 150, 50, 0.3), rgba(255, 100, 50, 0.15));
 }
 
 .panel-title {

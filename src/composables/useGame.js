@@ -29,6 +29,21 @@ export function useGame() {
   const canHunt = computed(() => tools.value > 0)
   const huntSuccessRate = computed(() => 0.3 + tools.value * 0.15)
 
+  const temperatureStage = computed(() => {
+    const temp = temperature.value
+    if (temp <= 20) return 'freezing'
+    if (temp <= 40) return 'cold'
+    if (temp <= 60) return 'cool'
+    if (temp <= 80) return 'warm'
+    return 'hot'
+  })
+
+  const isFreezing = computed(() => temperatureStage.value === 'freezing')
+  const isCold = computed(() => temperatureStage.value === 'cold')
+  const isCool = computed(() => temperatureStage.value === 'cool')
+  const isWarm = computed(() => temperatureStage.value === 'warm')
+  const isHot = computed(() => temperatureStage.value === 'hot')
+
   function addLog(message, type = 'info') {
     const timestamp = new Date().toLocaleTimeString()
     actionLog.value.unshift({ message, type, timestamp })
@@ -344,6 +359,12 @@ export function useGame() {
     canMakeFire,
     canHunt,
     huntSuccessRate,
+    temperatureStage,
+    isFreezing,
+    isCold,
+    isCool,
+    isWarm,
+    isHot,
     chopWood,
     hunt,
     makeTools,

@@ -1,5 +1,5 @@
 <template>
-  <div class="resource-panel">
+  <div class="resource-panel" :class="`temp-${temperatureStage}`">
     <h3 class="panel-title">资源</h3>
     <div class="resources-grid">
       <div class="resource-item">
@@ -50,7 +50,8 @@ const props = defineProps({
   wood: { type: Number, default: 0 },
   food: { type: Number, default: 0 },
   hide: { type: Number, default: 0 },
-  tools: { type: Number, default: 0 }
+  tools: { type: Number, default: 0 },
+  temperatureStage: { type: String, default: 'warm' }
 })
 
 function getHeatColor() {
@@ -67,6 +68,31 @@ function getHeatColor() {
   padding: 20px;
   backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.5s ease;
+}
+
+.resource-panel.temp-freezing {
+  background: linear-gradient(135deg, rgba(100, 200, 255, 0.25), rgba(50, 150, 200, 0.15));
+  border-color: rgba(100, 200, 255, 0.4);
+  box-shadow: 0 0 20px rgba(100, 200, 255, 0.3);
+}
+
+.resource-panel.temp-cold {
+  background: linear-gradient(135deg, rgba(80, 180, 220, 0.2), rgba(40, 120, 180, 0.1));
+  border-color: rgba(80, 180, 220, 0.3);
+  box-shadow: 0 0 15px rgba(80, 180, 220, 0.2);
+}
+
+.resource-panel.temp-warm {
+  background: linear-gradient(135deg, rgba(255, 150, 50, 0.15), rgba(255, 100, 50, 0.08));
+  border-color: rgba(255, 150, 50, 0.3);
+  box-shadow: 0 0 15px rgba(255, 150, 50, 0.15);
+}
+
+.resource-panel.temp-hot {
+  background: linear-gradient(135deg, rgba(255, 100, 50, 0.3), rgba(255, 50, 0, 0.15));
+  border-color: rgba(255, 100, 50, 0.5);
+  box-shadow: 0 0 25px rgba(255, 100, 50, 0.4);
 }
 
 .panel-title {

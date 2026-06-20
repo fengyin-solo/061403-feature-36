@@ -1,6 +1,8 @@
 <template>
   <div class="game-container" :class="gameBgClass">
     <div v-if="isBlizzard" class="snow-overlay"></div>
+    <div v-if="isFreezing" class="frost-overlay"></div>
+    <div v-if="isHot" class="heat-overlay"></div>
     
     <header class="game-header">
       <h1 class="game-title">❄️ 雪地生存 ❄️</h1>
@@ -31,6 +33,7 @@
           <Thermometer 
             :temperature="temperature" 
             :isDanger="isDanger"
+            :temperatureStage="temperatureStage"
           />
           <ResourcePanel 
             :heat="heat"
@@ -38,12 +41,13 @@
             :food="food"
             :hide="hide"
             :tools="tools"
+            :temperatureStage="temperatureStage"
           />
         </div>
 
         <div class="center-panel">
-          <div class="campfire-wrapper">
-            <Campfire :heat="heat" :canvasSize="280" />
+          <div class="campfire-wrapper" :class="`temp-${temperatureStage}`">
+            <Campfire :heat="heat" :canvasSize="280" :temperatureStage="temperatureStage" />
           </div>
           <div class="heat-info">
             <div class="heat-label">🔥 热量值</div>
@@ -65,6 +69,7 @@
             :canCraft="wood >= 2 && hide >= 1"
             :huntRate="huntSuccessRate"
             :food="food"
+            :temperatureStage="temperatureStage"
             @chop="handleChop"
             @hunt="handleHunt"
             @craft="handleCraft"
@@ -75,7 +80,7 @@
       </div>
 
       <div class="bottom-section">
-        <LogPanel :logs="actionLog" />
+        <LogPanel :logs="actionLog" :temperatureStage="temperatureStage" />
       </div>
     </main>
 
@@ -122,6 +127,12 @@ const {
   isDanger,
   canMakeFire,
   huntSuccessRate,
+  temperatureStage,
+  isFreezing,
+  isCold,
+  isCool,
+  isWarm,
+  isHot,
   chopWood,
   hunt,
   makeTools,
@@ -154,7 +165,12 @@ const gameBgClass = computed(() => ({
   'day-bg': isDay.value && !isBlizzard.value,
   'night-bg': isNight.value && !isBlizzard.value,
   'blizzard-day-bg': isDay.value && isBlizzard.value,
-  'blizzard-night-bg': isNight.value && isBlizzard.value
+  'blizzard-night-bg': isNight.value && isBlizzard.value,
+  'temp-freezing': isFreezing.value,
+  'temp-cold': isCold.value,
+  'temp-cool': isCool.value,
+  'temp-warm': isWarm.value,
+  'temp-hot': isHot.value
 }))
 
 function getHeatGradient() {
@@ -263,6 +279,78 @@ watch(isDanger, (newVal) => {
   background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
 }
 
+.temp-freezing.day-bg {
+  background: linear-gradient(180deg, #4a90a4 0%, #6bb5c9 30%, #a8d8e8 60%, #d4f1f9 100%),
+              linear-gradient(180deg, rgba(100, 200, 255, 0.3) 0%, rgba(150, 220, 255, 0.2) 100%);
+  background-blend-mode: overlay;
+}
+
+.temp-freezing.night-bg {
+  background: linear-gradient(180deg, #0a1628 0%, #1a2a4a 50%, #2a3a5a 100%),
+              linear-gradient(180deg, rgba(50, 150, 200, 0.4) 0%, rgba(80, 180, 220, 0.3) 100%);
+  background-blend-mode: overlay;
+}
+
+.temp-freezing.blizzard-day-bg {
+  background: linear-gradient(180deg, #4a5a6a 0%, #6a7a8a 50%, #8a9aaa 100%),
+              linear-gradient(180deg, rgba(100, 200, 255, 0.5) 0%, rgba(150, 220, 255, 0.4) 100%);
+  background-blend-mode: overlay;
+}
+
+.temp-freezing.blizzard-night-bg {
+  background: linear-gradient(180deg, #0a1020 0%, #101828 50%, #182038 100%),
+              linear-gradient(180deg, rgba(50, 150, 200, 0.5) 0%, rgba(80, 180, 220, 0.4) 100%);
+  background-blend-mode: overlay;
+}
+
+.temp-cold.day-bg {
+  background: linear-gradient(180deg, #6ab0c4 0%, #8ac8d8 50%, #b8e0ec 100%);
+}
+
+.temp-cold.night-bg {
+  background: linear-gradient(180deg, #0c1a2e 0%, #1c2a4e 50%, #2c3a5e 100%);
+}
+
+.temp-cold.blizzard-day-bg {
+  background: linear-gradient(180deg, #5a6a7a 0%, #7a8a9a 50%, #9aaaba 100%);
+}
+
+.temp-cold.blizzard-night-bg {
+  background: linear-gradient(180deg, #121a2e 0%, #1a2438 50%, #222c42 100%);
+}
+
+.temp-warm.day-bg {
+  background: linear-gradient(180deg, #87ceeb 0%, #b8e0f0 30%, #ffe4b5 70%, #ffd700 100%);
+}
+
+.temp-warm.night-bg {
+  background: linear-gradient(180deg, #1a1020 0%, #2a1a3a 40%, #4a2a2a 70%, #6a3a1a 100%);
+}
+
+.temp-warm.blizzard-day-bg {
+  background: linear-gradient(180deg, #7a8a8a 0%, #9aaaa0 50%, #c0c0a0 100%);
+}
+
+.temp-warm.blizzard-night-bg {
+  background: linear-gradient(180deg, #1a1a2a 0%, #2a2a3a 50%, #4a3a2a 100%);
+}
+
+.temp-hot.day-bg {
+  background: linear-gradient(180deg, #ff7f50 0%, #ffa07a 30%, #ffd700 60%, #ffff00 100%);
+}
+
+.temp-hot.night-bg {
+  background: linear-gradient(180deg, #2a1010 0%, #4a2010 40%, #6a3010 70%, #8a4020 100%);
+}
+
+.temp-hot.blizzard-day-bg {
+  background: linear-gradient(180deg, #8a6a5a 0%, #aa8a6a 50%, #caaa8a 100%);
+}
+
+.temp-hot.blizzard-night-bg {
+  background: linear-gradient(180deg, #2a1810 0%, #4a2818 50%, #6a3820 100%);
+}
+
 .snow-overlay {
   position: fixed;
   top: 0;
@@ -281,6 +369,46 @@ watch(isDanger, (newVal) => {
 @keyframes snowfall {
   0% { background-position: 0 0, 0 0, 0 0; }
   100% { background-position: 50px 100px, -50px 100px, 30px 100px; }
+}
+
+.frost-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: 
+    radial-gradient(ellipse at 10% 90%, rgba(200, 230, 255, 0.15) 0%, transparent 40%),
+    radial-gradient(ellipse at 90% 10%, rgba(200, 230, 255, 0.15) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 50%, rgba(150, 200, 255, 0.1) 0%, transparent 60%);
+  animation: frostPulse 3s ease-in-out infinite;
+}
+
+@keyframes frostPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.heat-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: 
+    radial-gradient(ellipse at 50% 30%, rgba(255, 150, 50, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(255, 100, 0, 0.1) 0%, transparent 40%),
+    radial-gradient(ellipse at 80% 70%, rgba(255, 120, 30, 0.1) 0%, transparent 40%);
+  animation: heatPulse 2s ease-in-out infinite;
+}
+
+@keyframes heatPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.02); }
 }
 
 .game-header {
@@ -360,6 +488,31 @@ watch(isDanger, (newVal) => {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.5s ease;
+}
+
+.campfire-wrapper.temp-freezing {
+  background: linear-gradient(135deg, rgba(0, 50, 80, 0.4), rgba(0, 30, 60, 0.3));
+  border-color: rgba(100, 200, 255, 0.3);
+  box-shadow: 0 0 30px rgba(100, 200, 255, 0.2), inset 0 0 30px rgba(0, 50, 80, 0.3);
+}
+
+.campfire-wrapper.temp-cold {
+  background: linear-gradient(135deg, rgba(0, 40, 70, 0.35), rgba(0, 25, 50, 0.25));
+  border-color: rgba(80, 180, 220, 0.25);
+  box-shadow: 0 0 25px rgba(80, 180, 220, 0.15);
+}
+
+.campfire-wrapper.temp-warm {
+  background: linear-gradient(135deg, rgba(50, 20, 0, 0.3), rgba(80, 40, 0, 0.2));
+  border-color: rgba(255, 150, 50, 0.25);
+  box-shadow: 0 0 25px rgba(255, 150, 50, 0.2);
+}
+
+.campfire-wrapper.temp-hot {
+  background: linear-gradient(135deg, rgba(80, 30, 0, 0.4), rgba(120, 50, 0, 0.3));
+  border-color: rgba(255, 100, 50, 0.4);
+  box-shadow: 0 0 40px rgba(255, 100, 50, 0.4), inset 0 0 30px rgba(100, 30, 0, 0.3);
 }
 
 .heat-info {

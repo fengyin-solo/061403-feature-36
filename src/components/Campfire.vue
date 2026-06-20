@@ -1,5 +1,5 @@
 <template>
-  <div class="campfire-container">
+  <div class="campfire-container" :class="`temp-${temperatureStage}`">
     <canvas ref="canvasRef" :width="canvasSize" :height="canvasSize"></canvas>
   </div>
 </template>
@@ -15,6 +15,10 @@ const props = defineProps({
   canvasSize: {
     type: Number,
     default: 200
+  },
+  temperatureStage: {
+    type: String,
+    default: 'warm'
   }
 })
 
@@ -208,5 +212,32 @@ canvas {
   border-radius: 50%;
   background: radial-gradient(circle, #1a1a2e 0%, #0f0f1a 100%);
   box-shadow: 0 0 30px rgba(255, 100, 50, 0.3);
+  transition: all 0.5s ease;
+}
+
+.campfire-container.temp-freezing canvas {
+  background: radial-gradient(circle, #0a1628 0%, #050a14 100%);
+  box-shadow: 0 0 30px rgba(100, 200, 255, 0.3), inset 0 0 40px rgba(100, 200, 255, 0.1);
+}
+
+.campfire-container.temp-cold canvas {
+  background: radial-gradient(circle, #0f1a2a 0%, #0a0f1a 100%);
+  box-shadow: 0 0 25px rgba(80, 180, 220, 0.25), inset 0 0 30px rgba(80, 180, 220, 0.08);
+}
+
+.campfire-container.temp-warm canvas {
+  background: radial-gradient(circle, #1a1010 0%, #0f0a0a 100%);
+  box-shadow: 0 0 35px rgba(255, 150, 50, 0.4), inset 0 0 30px rgba(255, 100, 50, 0.1);
+}
+
+.campfire-container.temp-hot canvas {
+  background: radial-gradient(circle, #2a1005 0%, #1a0803 100%);
+  box-shadow: 0 0 50px rgba(255, 100, 50, 0.6), inset 0 0 40px rgba(255, 50, 0, 0.2);
+  animation: hotGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes hotGlow {
+  0%, 100% { box-shadow: 0 0 50px rgba(255, 100, 50, 0.6), inset 0 0 40px rgba(255, 50, 0, 0.2); }
+  50% { box-shadow: 0 0 65px rgba(255, 120, 60, 0.8), inset 0 0 50px rgba(255, 80, 20, 0.3); }
 }
 </style>
