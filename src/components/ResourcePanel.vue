@@ -83,6 +83,12 @@ function getHeatColor() {
   box-shadow: 0 0 15px rgba(80, 180, 220, 0.2);
 }
 
+.resource-panel.temp-cool {
+  background: linear-gradient(135deg, rgba(100, 190, 210, 0.18), rgba(60, 140, 170, 0.08));
+  border-color: rgba(100, 190, 210, 0.28);
+  box-shadow: 0 0 15px rgba(100, 190, 210, 0.18);
+}
+
 .resource-panel.temp-warm {
   background: linear-gradient(135deg, rgba(255, 150, 50, 0.15), rgba(255, 100, 50, 0.08));
   border-color: rgba(255, 150, 50, 0.3);

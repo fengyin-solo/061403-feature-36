@@ -106,6 +106,12 @@ function getBulbColor() {
   box-shadow: 0 0 20px rgba(80, 180, 220, 0.3);
 }
 
+.thermometer-container.temp-cool {
+  background: linear-gradient(135deg, rgba(100, 190, 210, 0.22), rgba(60, 140, 180, 0.12));
+  border-color: rgba(100, 190, 210, 0.35);
+  box-shadow: 0 0 18px rgba(100, 190, 210, 0.25);
+}
+
 .thermometer-container.temp-warm {
   background: linear-gradient(135deg, rgba(255, 150, 50, 0.2), rgba(255, 100, 50, 0.1));
   border-color: rgba(255, 150, 50, 0.4);

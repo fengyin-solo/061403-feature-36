@@ -225,6 +225,11 @@ canvas {
   box-shadow: 0 0 25px rgba(80, 180, 220, 0.25), inset 0 0 30px rgba(80, 180, 220, 0.08);
 }
 
+.campfire-container.temp-cool canvas {
+  background: radial-gradient(circle, #142030 0%, #0d1520 100%);
+  box-shadow: 0 0 30px rgba(100, 180, 200, 0.28), inset 0 0 35px rgba(100, 180, 200, 0.1);
+}
+
 .campfire-container.temp-warm canvas {
   background: radial-gradient(circle, #1a1010 0%, #0f0a0a 100%);
   box-shadow: 0 0 35px rgba(255, 150, 50, 0.4), inset 0 0 30px rgba(255, 100, 50, 0.1);

@@ -319,6 +319,22 @@ watch(isDanger, (newVal) => {
   background: linear-gradient(180deg, #121a2e 0%, #1a2438 50%, #222c42 100%);
 }
 
+.temp-cool.day-bg {
+  background: linear-gradient(180deg, #7bc0d4 0%, #9ad4e4 40%, #c0e0ec 70%, #d4ebf2 100%);
+}
+
+.temp-cool.night-bg {
+  background: linear-gradient(180deg, #141f3a 0%, #243050 50%, #344060 100%);
+}
+
+.temp-cool.blizzard-day-bg {
+  background: linear-gradient(180deg, #6a7a8a 0%, #8a9aaa 50%, #aababa 100%);
+}
+
+.temp-cool.blizzard-night-bg {
+  background: linear-gradient(180deg, #181f3a 0%, #202848 50%, #283058 100%);
+}
+
 .temp-warm.day-bg {
   background: linear-gradient(180deg, #87ceeb 0%, #b8e0f0 30%, #ffe4b5 70%, #ffd700 100%);
 }
@@ -501,6 +517,12 @@ watch(isDanger, (newVal) => {
   background: linear-gradient(135deg, rgba(0, 40, 70, 0.35), rgba(0, 25, 50, 0.25));
   border-color: rgba(80, 180, 220, 0.25);
   box-shadow: 0 0 25px rgba(80, 180, 220, 0.15);
+}
+
+.campfire-wrapper.temp-cool {
+  background: linear-gradient(135deg, rgba(20, 50, 80, 0.3), rgba(30, 50, 70, 0.2));
+  border-color: rgba(100, 180, 200, 0.25);
+  box-shadow: 0 0 25px rgba(100, 180, 200, 0.18);
 }
 
 .campfire-wrapper.temp-warm {
